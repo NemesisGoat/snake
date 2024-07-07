@@ -42,7 +42,6 @@ const Game: React.FC = () => {
                 graph.polygon(square, 'lime');
             }
         })
-        //squares.forEach((square, index) => { graph.print(square[0].x, square[0].y, index.toString(), 'white', 150) });
     }
 
     const spawnSnake = () => {
@@ -53,52 +52,50 @@ const Game: React.FC = () => {
     }
 
     const moveSnake = () => {
-        if (head.place + 1) {
-            for (let i = segments.length - 1; i >= 0; i--) {
-                segments[i].place = segments[i].next.place;
-            }
-            switch (head.direction) {
-                case 'right':
-                    if ((head.place + 1) % (WIN.SIDE - 1) === 0) {
-                        head.place = head.place - WIN.SIDE + 2;
-                    } else {
-                        head.place++;
-                    }
-                    break;
-                case 'left':
-                    if ((head.place) % (WIN.SIDE - 1) === 0) {
-                        head.place = head.place + WIN.SIDE - 2;
-                    } else {
-                        head.place--;
-                    }
-                    break;
-                case 'up':
-                    if ((head.place + WIN.SIDE - 1) > squares.length - 1) {
-                        head.place = head.place - (WIN.SIDE - 1)*(WIN.SIDE-2);
-                    } else {
-                        head.place = head.place + WIN.SIDE - 1;
-                    }
-                    break;
-                case 'down':
-                    if ((head.place - WIN.SIDE + 1) < 0) {
-                        head.place = head.place + (WIN.SIDE - 1)*(WIN.SIDE-2);
-                    } else {
-                        head.place = head.place - WIN.SIDE + 1;
-                    }
-                    break;
-            }
-            segments.forEach(segment => {
-                if (head.place === segment.place) {
-                    segments = []
-                    head.direction = 'right';
-                    spawnSnake();
-                }
-            })
-            if (head.place === locationOfFood) {
-                growSnake();
-            }
-            render();
+        for (let i = segments.length - 1; i >= 0; i--) {
+            segments[i].place = segments[i].next.place;
         }
+        switch (head.direction) {
+            case 'right':
+                if ((head.place + 1) % (WIN.SIDE - 1) === 0) {
+                    head.place = head.place - WIN.SIDE + 2;
+                } else {
+                    head.place++;
+                }
+                break;
+            case 'left':
+                if ((head.place) % (WIN.SIDE - 1) === 0) {
+                    head.place = head.place + WIN.SIDE - 2;
+                } else {
+                    head.place--;
+                }
+                break;
+            case 'up':
+                if ((head.place + WIN.SIDE - 1) > squares.length - 1) {
+                    head.place = head.place - (WIN.SIDE - 1) * (WIN.SIDE - 2);
+                } else {
+                    head.place = head.place + WIN.SIDE - 1;
+                }
+                break;
+            case 'down':
+                if ((head.place - WIN.SIDE + 1) < 0) {
+                    head.place = head.place + (WIN.SIDE - 1) * (WIN.SIDE - 2);
+                } else {
+                    head.place = head.place - WIN.SIDE + 1;
+                }
+                break;
+        }
+        segments.forEach(segment => {
+            if (head.place === segment.place) {
+                segments = []
+                head.direction = 'right';
+                spawnSnake();
+            }
+        })
+        if (head.place === locationOfFood) {
+            growSnake();
+        }
+        render();
     }
 
     const keyDownHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -133,14 +130,14 @@ const Game: React.FC = () => {
 
     const spawnFood = () => {
         const location = Math.floor(Math.random() * ((WIN.SIDE - 1) ** 2 - 1));
-        segments.forEach(segment => {
-            if (segment.place === location) {
-                spawnFood();
-            }
-        });
-        if (head.place === location) {
-            spawnFood();
-        } 
+        // segments.forEach(segment => {
+        //     if (segment.place === location) {
+        //         return spawnFood();
+        //     }
+        // });
+        // if (head.place === location) {
+        //     return spawnFood();
+        // } 
         return location;
     }
 
