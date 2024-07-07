@@ -177,7 +177,8 @@ const Game: React.FC = () => {
         <div>
             <canvas className='field' id='field'></canvas>
             <div></div>
-            <input onChange={changeSide} onKeyDown={keyDownHandler} type="range" id="side" min={8} max={42} step={2} defaultValue={10}></input>
+            <label htmlFor="side">Размер поля </label>
+            <input name="side" onChange={changeSide} onKeyDown={keyDownHandler} type="range" id="side" min={8} max={42} step={2} defaultValue={10}></input>
         </div>
     )
 }
