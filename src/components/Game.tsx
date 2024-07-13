@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import Graph, { TWIN } from "../modules/Graph/Graph";
 import Head from "../modules/SnakeGame/entities/Head";
 import Segment from "../modules/SnakeGame/entities/Segment";
+import Snake from "../modules/SnakeGame/entities/Snake";
+import BotSnake from "../modules/SnakeGame/entities/BotSnake";
 
 export type TPoint = { x: number, y: number };
 
@@ -14,9 +16,8 @@ const Game: React.FC = () => {
 
     let graph: Graph;
     let squares: TPoint[][] = [];
-    let segments: Segment[] = [];
+    let snakes: Snake[] = [];
     let locationOfFood = 0;
-    const head = new Head();
 
     const field = () => {
         let points = [];
@@ -46,86 +47,61 @@ const Game: React.FC = () => {
 
     const spawnSnake = () => {
         const pointOfStart = (squares.length - 1) / 2;
-        head.place = pointOfStart;
-        segments.push(new Segment(head, head.place - 1));
-        segments.push(new Segment(segments[segments.length - 1], segments[segments.length - 1].place - 1));
+        const snake = new Snake(new Head(pointOfStart, 'right'), WIN, squares)
+        snakes.push(snake)
+        snake.segments.push(new Segment(snake.head, snake.head.place - 1));
+        snake.segments.push(new Segment(snake.segments[snake.segments.length - 1], snake.segments[snake.segments.length - 1].place - 1));
     }
 
-    const moveSnake = () => {
-        for (let i = segments.length - 1; i >= 0; i--) {
-            segments[i].place = segments[i].next.place;
-        }
-        switch (head.direction) {
-            case 'right':
-                if ((head.place + 1) % (WIN.SIDE - 1) === 0) {
-                    head.place = head.place - WIN.SIDE + 2;
-                } else {
-                    head.place++;
-                }
-                break;
-            case 'left':
-                if ((head.place) % (WIN.SIDE - 1) === 0) {
-                    head.place = head.place + WIN.SIDE - 2;
-                } else {
-                    head.place--;
-                }
-                break;
-            case 'up':
-                if ((head.place + WIN.SIDE - 1) > squares.length - 1) {
-                    head.place = head.place - (WIN.SIDE - 1) * (WIN.SIDE - 2);
-                } else {
-                    head.place = head.place + WIN.SIDE - 1;
-                }
-                break;
-            case 'down':
-                if ((head.place - WIN.SIDE + 1) < 0) {
-                    head.place = head.place + (WIN.SIDE - 1) * (WIN.SIDE - 2);
-                } else {
-                    head.place = head.place - WIN.SIDE + 1;
-                }
-                break;
-        }
-        segments.forEach(segment => {
-            if (head.place === segment.place) {
-                segments = []
-                head.direction = 'right';
-                spawnSnake();
+    const spawnBotSnake = () => {
+        const pointOfStart = (squares.length - 1) / 2;
+        const snake = new BotSnake(new Head(pointOfStart, 'right'), WIN, squares)
+        snakes.push(snake)
+        snake.segments.push(new Segment(snake.head, snake.head.place - 1));
+        snake.segments.push(new Segment(snake.segments[snake.segments.length - 1], snake.segments[snake.segments.length - 1].place - 1));
+    }
+
+    const moveSnakes = () => {
+        snakes.forEach(snake => {
+            if (snake instanceof BotSnake) {
+                snake.head.direction = snake.behaviour(locationOfFood);
             }
+            snake.moveSnake();
         })
-        if (head.place === locationOfFood) {
-            growSnake();
-        }
-        render();
     }
 
     const keyDownHandler = (event: React.KeyboardEvent<HTMLInputElement>) => {
         switch (event.code) {
             case 'KeyW':
-                if (head.direction !== 'down') {
-                    head.direction = 'up';
+                if (snakes[0].head.direction !== 'down') {
+                    snakes[0].head.direction = 'up';
                 }
                 break;
             case 'KeyD':
-                if (head.direction !== 'left') {
-                    head.direction = 'right';
+                if (snakes[0].head.direction !== 'left') {
+                    snakes[0].head.direction = 'right';
                 }
                 break;
             case 'KeyS':
-                if (head.direction !== 'up') {
-                    head.direction = 'down';
+                if (snakes[0].head.direction !== 'up') {
+                    snakes[0].head.direction = 'down';
                 }
                 break;
             case 'KeyA':
-                if (head.direction !== 'right') {
-                    head.direction = 'left';
+                if (snakes[0].head.direction !== 'right') {
+                    snakes[0].head.direction = 'left';
                 }
                 break;
         }
     }
 
     const growSnake = () => {
-        segments.push(new Segment(segments[segments.length - 1], segments[segments.length - 1].place))
-        locationOfFood = spawnFood();
+        snakes.forEach((snake) => {
+            if (snake.head.place === locationOfFood) {
+                snake.growSnake();
+                locationOfFood = spawnFood();
+            }
+        })
     }
 
     const spawnFood = () => {
@@ -144,7 +120,7 @@ const Game: React.FC = () => {
     const changeSide = (event: React.ChangeEvent<HTMLInputElement>) => {
         WIN.SIDE = Number(event.target.value);
         squares = [];
-        segments = [];
+        snakes = [];
         field();
         spawnSnake();
         growSnake();
@@ -154,10 +130,14 @@ const Game: React.FC = () => {
     const render = () => {
         graph.clear();
         colorField();
-        if (head.place) {
-            segments.forEach(segment => graph.polygon(squares[segment.place], 'gold'));
-            graph.polygon(squares[head.place], 'yellow');
-        }
+        moveSnakes();
+        growSnake();
+        snakes.forEach(snake => {
+            if (snake.head.place) {
+                snake.segments.forEach(segment => graph.polygon(squares[segment.place], `rgb(${snake.colors[0].r}, ${snake.colors[0].g}, ${snake.colors[0].b})`));
+                graph.polygon(squares[snake.head.place], `rgb(${snake.colors[1].r}, ${snake.colors[1].g}, ${snake.colors[1].b})`);
+            }
+        })
         graph.polygon(squares[locationOfFood], 'red');
     }
 
@@ -168,7 +148,7 @@ const Game: React.FC = () => {
         field();
         spawnSnake();
         growSnake();
-        const moving = setInterval(moveSnake, 400);
+        const moving = setInterval(render, 400);
         render();
         return () => { clearInterval(moving) }
     });
@@ -179,6 +159,7 @@ const Game: React.FC = () => {
             <div></div>
             <label htmlFor="side">Размер поля </label>
             <input name="side" onChange={changeSide} onKeyDown={keyDownHandler} type="range" id="side" min={8} max={42} step={2} defaultValue={10}></input>
+            <button onClick={spawnBotSnake}>Добавить бота</button>
         </div>
     )
 }
