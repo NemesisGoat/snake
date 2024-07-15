@@ -19,6 +19,8 @@ const Game: React.FC = () => {
     let squares: TSquare[] = [];
     let snakes: Snake[] = [];
     let locationOfFood = 0;
+    let locationOfBoostUp = 0;
+    let locationOfBoostDown = 0;
 
     const field = () => {
         let points = [];
@@ -117,11 +119,45 @@ const Game: React.FC = () => {
             }
         })
     }
+    
+    const boostUpSnake = () => {
+        snakes.forEach((snake) => {
+            if (snake.head.place === locationOfBoostUp) {
+                snake.changeSpeed(200);
+                locationOfBoostUp = spawnBoostUp();
+            }
+        })
+    }
+    
+    const boostDownSnake = () => {
+        snakes.forEach((snake) => {
+            if (snake.head.place === locationOfBoostDown) {
+                snake.changeSpeed(-200);
+                locationOfBoostDown = spawnBoostDown();
+            }
+        })
+    }
 
     const spawnFood: any = () => {
         const location = Math.floor(Math.random() * ((WIN.SIDE - 1) ** 2 - 1));
         if (squares[location].taken) {
             return spawnFood();
+        } 
+        return location;
+    }
+
+    const spawnBoostUp: any = () => {
+        const location = Math.floor(Math.random() * ((WIN.SIDE - 1) ** 2 - 1));
+        if (squares[location].taken) {
+            return spawnBoostUp();
+        } 
+        return location;
+    }
+    
+    const spawnBoostDown: any = () => {
+        const location = Math.floor(Math.random() * ((WIN.SIDE - 1) ** 2 - 1));
+        if (squares[location].taken) {
+            return spawnBoostDown();
         } 
         return location;
     }
@@ -141,6 +177,8 @@ const Game: React.FC = () => {
         colorField();
         moveSnakes();
         growSnake();
+        boostUpSnake();
+        boostDownSnake();
         snakes.forEach(snake => {
             if (snake.head.place) {
                 snake.segments.forEach(segment => graph.polygon(squares[segment.place].num, snake.colors[0]));
@@ -148,6 +186,8 @@ const Game: React.FC = () => {
             }
         })
         graph.polygon(squares[locationOfFood].num, 'red');
+        graph.polygon(squares[locationOfBoostUp].num, 'pink');
+        graph.polygon(squares[locationOfBoostDown].num, 'olive');
     }
 
 
@@ -157,7 +197,7 @@ const Game: React.FC = () => {
         squares = [];
         field();
         spawnSnake();
-        const moving = setInterval(render, 400);
+        const moving = setInterval(render, 100);
         render();
         return () => { clearInterval(moving) }
     });
