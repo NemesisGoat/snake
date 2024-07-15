@@ -102,6 +102,13 @@ const Game: React.FC = () => {
         }
     }
 
+    const changeHeadColor = (event: React.ChangeEvent<HTMLInputElement>) => {
+        snakes[0].colors[1] = event.target.value;
+    }
+    const changeBodyColor = (event: React.ChangeEvent<HTMLInputElement>) => {
+        snakes[0].colors[0] = event.target.value;
+    }
+
     const growSnake = () => {
         snakes.forEach((snake) => {
             if (snake.head.place === locationOfFood) {
@@ -136,8 +143,8 @@ const Game: React.FC = () => {
         growSnake();
         snakes.forEach(snake => {
             if (snake.head.place) {
-                snake.segments.forEach(segment => graph.polygon(squares[segment.place].num, `rgb(${snake.colors[0].r}, ${snake.colors[0].g}, ${snake.colors[0].b})`));
-                graph.polygon(squares[snake.head.place].num, `rgb(${snake.colors[1].r}, ${snake.colors[1].g}, ${snake.colors[1].b})`);
+                snake.segments.forEach(segment => graph.polygon(squares[segment.place].num, snake.colors[0]));
+                graph.polygon(squares[snake.head.place].num, snake.colors[1]);
             }
         })
         graph.polygon(squares[locationOfFood].num, 'red');
@@ -162,6 +169,8 @@ const Game: React.FC = () => {
             <label htmlFor="side">Размер поля </label>
             <input name="side" onChange={changeSide} type="range" id="side" min={8} max={42} step={2} defaultValue={10}></input>
             <button onClick={spawnBotSnake}>Добавить бота</button>
+            <input type="color" onChange={changeHeadColor}></input>
+            <input type="color" onChange={changeBodyColor}></input>
         </div>
     )
 }

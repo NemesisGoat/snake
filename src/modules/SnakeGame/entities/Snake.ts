@@ -10,7 +10,7 @@ class Snake {
     public head: Head;
     public WIN: TWIN;
     private squares: TSquare[];
-    public colors: color[];
+    public colors: string[];
     public canMove: boolean;
 
     constructor(head:Head, WIN:TWIN, squares:TSquare[], colors = []) {
@@ -21,8 +21,8 @@ class Snake {
         this.colors = colors;
         if (colors.length === 0) {
             this.colors = [
-                {r: Math.random() * 255, g: Math.random() * 255, b: Math.random() * 255},
-                {r: Math.random() * 255, g: Math.random() * 255, b: Math.random() * 255}
+                `rgb(${Math.random()*255}, ${Math.random()*255}, ${Math.random()*255})`,
+                `rgb(${Math.random()*255}, ${Math.random()*255}, ${Math.random()*255})`
             ]; 
         }
         this.canMove = true;
