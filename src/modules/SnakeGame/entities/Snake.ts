@@ -9,7 +9,7 @@ class Snake {
     public segments: Segment[];
     public head: Head;
     public WIN: TWIN;
-    private squares: TSquare[];
+    public squares: TSquare[];
     public colors: string[];
     public canMove: boolean;
     public speed: number;
