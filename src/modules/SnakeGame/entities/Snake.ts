@@ -1,4 +1,4 @@
-import { TPoint } from "../../../components/Game";
+import { TPoint, TSquare } from "../../../components/Game";
 import { TWIN } from "../../Graph/Graph";
 import Head from "./Head";
 import Segment from "./Segment";
@@ -9,10 +9,11 @@ class Snake {
     public segments: Segment[];
     public head: Head;
     public WIN: TWIN;
-    private squares: TPoint[][];
+    private squares: TSquare[];
     public colors: color[];
+    public canMove: boolean;
 
-    constructor(head:Head, WIN:TWIN, squares:TPoint[][], colors = []) {
+    constructor(head:Head, WIN:TWIN, squares:TSquare[], colors = []) {
         this.segments = [];
         this.head = head;
         this.WIN = WIN;
@@ -24,6 +25,8 @@ class Snake {
                 {r: Math.random() * 255, g: Math.random() * 255, b: Math.random() * 255}
             ]; 
         }
+        this.canMove = true;
+        const moving = setInterval(this.moveSnake, 400)
     }
 
     growSnake = () => {
@@ -31,8 +34,11 @@ class Snake {
     }
 
     moveSnake = () => {
+        this.canMove = true;
+        this.squares[this.segments[this.segments.length-1].place].taken = false;
         for (let i = this.segments.length - 1; i >= 0; i--) {
             this.segments[i].place = this.segments[i].next.place;
+            this.squares[this.segments[i].place].taken = true;
         }
         switch (this.head.direction) {
             case 'right':
@@ -64,6 +70,10 @@ class Snake {
                 }
                 break;
         }
+        if (this.squares[this.head.place].taken) {
+            this.respawnSnake();
+        }
+        this.squares[this.head.place].taken = true;
         // this.segments.forEach(segment => {
         //     if (this.head.place === segment.place) {
         //         this.segments = []
@@ -71,6 +81,18 @@ class Snake {
         //         spawnSnake();
         //     }
         // })
+    }
+
+    respawnSnake: any = () => {
+        this.segments.forEach(segment => {
+            this.squares[segment.place].taken = false;
+        })
+        this.squares[this.head.place].taken = false;
+        this.segments = [];
+        this.head.place = Math.floor(Math.random() * this.squares.length);
+        if (this.squares[this.head.place].taken) return (this.respawnSnake());
+        this.segments.push(new Segment(this.head, this.head.place));
+        this.segments.push(new Segment(this.segments[this.segments.length-1], this.segments[this.segments.length-1].place));
     }
 
 }

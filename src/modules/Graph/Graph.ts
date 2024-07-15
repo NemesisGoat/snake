@@ -21,6 +21,7 @@ class Graph {
         this.context = this.canvas.getContext('2d') as CanvasRenderingContext2D;
         this.contextV = this.canvas.getContext('2d') as CanvasRenderingContext2D;
         this.WIN = WIN;
+        this.canvas.focus()
     }
 
     xs(x: number): number {
