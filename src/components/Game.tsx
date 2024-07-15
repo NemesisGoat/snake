@@ -124,7 +124,8 @@ const Game: React.FC = () => {
         snakes.forEach((snake) => {
             if (snake.head.place === locationOfBoostUp) {
                 snake.changeSpeed(200);
-                locationOfBoostUp = spawnBoostUp();
+                locationOfBoostUp = -1;
+                setTimeout(() => locationOfBoostUp = spawnBoostDown(), 10000)
             }
         })
     }
@@ -133,7 +134,8 @@ const Game: React.FC = () => {
         snakes.forEach((snake) => {
             if (snake.head.place === locationOfBoostDown) {
                 snake.changeSpeed(-200);
-                locationOfBoostDown = spawnBoostDown();
+                locationOfBoostDown = -1;
+                setTimeout(() => locationOfBoostDown = spawnBoostDown(), 10000)
             }
         })
     }
@@ -186,8 +188,12 @@ const Game: React.FC = () => {
             }
         })
         graph.polygon(squares[locationOfFood].num, 'red');
-        graph.polygon(squares[locationOfBoostUp].num, 'pink');
-        graph.polygon(squares[locationOfBoostDown].num, 'olive');
+        if (locationOfBoostUp != -1) {
+            graph.polygon(squares[locationOfBoostUp].num, 'pink');
+        }
+        if (locationOfBoostDown != -1) {
+            graph.polygon(squares[locationOfBoostDown].num, 'olive');
+        }
     }
 
 

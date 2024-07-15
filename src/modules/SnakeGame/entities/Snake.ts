@@ -15,7 +15,7 @@ class Snake {
     public speed: number;
     private moving: any;
 
-    constructor(head: Head, WIN: TWIN, squares: TSquare[], colors = [], speed = 400) {
+    constructor(head: Head, WIN: TWIN, squares: TSquare[], colors = [], speed = 600) {
         this.segments = [];
         this.head = head;
         this.WIN = WIN;
