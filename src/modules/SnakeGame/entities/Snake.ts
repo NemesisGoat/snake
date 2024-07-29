@@ -3,8 +3,6 @@ import { TWIN } from "../../Graph/Graph";
 import Head from "./Head";
 import Segment from "./Segment";
 
-type color = { r: number, g: number, b: number };
-
 class Snake {
     public segments: Segment[];
     public head: Head;
@@ -45,31 +43,31 @@ class Snake {
         }
         switch (this.head.direction) {
             case 'right':
-                if ((this.head.place + 1) % (this.WIN.SIDE - 1) === 0) {
-                    this.head.place = this.head.place - this.WIN.SIDE + 2;
+                if ((this.head.place + 1) % (this.WIN.SIDE) === 0) {
+                    this.head.place = this.head.place - this.WIN.SIDE + 1;
                 } else {
                     this.head.place++;
                 }
                 break;
             case 'left':
-                if ((this.head.place) % (this.WIN.SIDE - 1) === 0) {
-                    this.head.place = this.head.place + this.WIN.SIDE - 2;
+                if ((this.head.place) % (this.WIN.SIDE) === 0) {
+                    this.head.place = this.head.place + this.WIN.SIDE - 1;
                 } else {
                     this.head.place--;
                 }
                 break;
             case 'up':
-                if ((this.head.place + this.WIN.SIDE - 1) > this.squares.length - 1) {
-                    this.head.place = this.head.place - (this.WIN.SIDE - 1) * (this.WIN.SIDE - 2);
+                if ((this.head.place + this.WIN.SIDE) > this.squares.length - 1) {
+                    this.head.place = this.head.place - (this.WIN.SIDE) * (this.WIN.SIDE - 1);
                 } else {
-                    this.head.place = this.head.place + this.WIN.SIDE - 1;
+                    this.head.place = this.head.place + this.WIN.SIDE;
                 }
                 break;
             case 'down':
-                if ((this.head.place - this.WIN.SIDE + 1) < 0) {
-                    this.head.place = this.head.place + (this.WIN.SIDE - 1) * (this.WIN.SIDE - 2);
+                if ((this.head.place - this.WIN.SIDE) < 0) {
+                    this.head.place = this.head.place + (this.WIN.SIDE) * (this.WIN.SIDE - 1);
                 } else {
-                    this.head.place = this.head.place - this.WIN.SIDE + 1;
+                    this.head.place = this.head.place - this.WIN.SIDE;
                 }
                 break;
         }
@@ -77,13 +75,6 @@ class Snake {
             this.respawnSnake();
         }
         this.squares[this.head.place].taken = true;
-        // this.segments.forEach(segment => {
-        //     if (this.head.place === segment.place) {
-        //         this.segments = []
-        //         this.head.direction = 'right';
-        //         spawnSnake();
-        //     }
-        // })
     }
 
     changeSpeed = (boost: number) => {
@@ -95,7 +86,10 @@ class Snake {
             clearInterval(this.moving);
             this.moving = setInterval(this.moveSnake, 1000 - this.speed);
         }, 5000);
+    }
 
+    stopSnake = () => {
+        clearInterval(this.moving);
     }
 
     respawnSnake: any = () => {

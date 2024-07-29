@@ -1,3 +1,5 @@
+import image from 'https://bogatyr.club/uploads/posts/2023-03/1678826790_bogatyr-club-p-fon-dlya-storis-kosmos-foni-vkontakte-5.jpg';
+
 export type TWIN = {
     LEFT: number;
     BOTTOM: number;
@@ -88,6 +90,14 @@ class Graph {
         this.contextV.fillText(text, this.xs(x), this.ys(y));
         this.contextV.stroke();
     };
+
+    drawBackground(image: any): void {
+        this.contextV.drawImage(image, 0, 0, this.canvasV.height, this.canvasV.width)
+    }
+
+    drawImage(image: any, x: number, y: number, side: number) {
+        this.contextV.drawImage(image, this.xs(x), this.ys(y), this.canvasV.height / side, this.canvasV.width / side)
+    }
 
 }
 

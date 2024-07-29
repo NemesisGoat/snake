@@ -13,26 +13,26 @@ class BotSnake extends Snake {
 
     behaviour = (locationOfFood: number) => {
         const distance = locationOfFood - this.head.place;
-        if (distance > 0 && distance < (this.WIN.SIDE - 1) && this.head.direction != 'left') {
+        if (distance > 0 && distance < (this.WIN.SIDE)) {
             if (this.squares[this.head.place + 1] && this.squares[this.head.place + 1].taken === false) {
                 return 'right';
-            } else if (this.squares[this.head.place + this.WIN.SIDE - 1] && this.squares[this.head.place + this.WIN.SIDE - 1].taken === false) {
+            } else if (this.squares[this.head.place + this.WIN.SIDE] && this.squares[this.head.place + this.WIN.SIDE].taken === false) {
                 return 'up';
-            } else if (this.squares[this.head.place - this.WIN.SIDE - 1] && this.squares[this.head.place - this.WIN.SIDE - 1].taken === false) {
+            } else if (this.squares[this.head.place - this.WIN.SIDE] && this.squares[this.head.place - this.WIN.SIDE].taken === false) {
                 return 'down';
             }
         }
-        if (distance < 0 && distance > -(this.WIN.SIDE - 1) && this.head.direction != 'right') {
+        if (distance < 0 && distance > -this.WIN.SIDE) {
             if (this.squares[this.head.place - 1] && this.squares[this.head.place - 1].taken === false) {
                 return 'left';
-            } else if (this.squares[this.head.place + this.WIN.SIDE - 1] && this.squares[this.head.place + this.WIN.SIDE - 1].taken === false) {
-                return 'up';
-            } else if (this.squares[this.head.place - this.WIN.SIDE - 1] && this.squares[this.head.place - this.WIN.SIDE - 1].taken === false) {
+            } else if (this.squares[this.head.place - this.WIN.SIDE] && this.squares[this.head.place - this.WIN.SIDE].taken === false) {
                 return 'down';
             }
+            } else if (this.squares[this.head.place + this.WIN.SIDE] && this.squares[this.head.place + this.WIN.SIDE].taken === false) {
+                return 'up';
         }
-        if ((distance > 0 && distance > (this.WIN.SIDE - 1)) || distance === (this.WIN.SIDE - 1) && this.head.direction != 'down') {
-            if (this.squares[this.head.place + this.WIN.SIDE - 1] && this.squares[this.head.place + this.WIN.SIDE - 1].taken === false) {
+        if ((distance > 0 && distance >= (this.WIN.SIDE))) {
+            if (this.squares[this.head.place + this.WIN.SIDE] && this.squares[this.head.place + this.WIN.SIDE].taken === false) {
                 return 'up';
             } else if (this.squares[this.head.place + 1] && this.squares[this.head.place + 1].taken === false) {
                 return 'right';
@@ -40,8 +40,8 @@ class BotSnake extends Snake {
                 return 'left';
             }
         }
-        if ((distance < 0 && distance < -(this.WIN.SIDE - 1)) || distance === -(this.WIN.SIDE - 1) && this.head.direction != 'up') {
-            if (this.squares[this.head.place - this.WIN.SIDE - 1] && this.squares[this.head.place - this.WIN.SIDE - 1].taken === false) {
+        if ((distance < 0 && distance <= -(this.WIN.SIDE))) {
+            if (this.squares[this.head.place - this.WIN.SIDE] && this.squares[this.head.place - this.WIN.SIDE].taken === false) {
                 return 'down';
             } else if (this.squares[this.head.place + 1] && this.squares[this.head.place + 1].taken === false) {
                 return 'right';
