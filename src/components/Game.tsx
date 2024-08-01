@@ -8,6 +8,7 @@ import BotSnake from "../modules/SnakeGame/entities/BotSnake";
 import boostDown from "../images/boostDown.png";
 import boostUp from "../images/boostUp.png";
 import food from "../images/food.png";
+import background from "../images/background.jpg";
 
 export type TPoint = { x: number, y: number };
 export type TSquare = {num: TPoint[], taken: boolean};
@@ -178,6 +179,9 @@ const Game: React.FC = () => {
         snakes = [];
         field();
         spawnSnake();
+        spawnFood();
+        spawnBoostUp();
+        spawnBoostDown();
     }
 
     const render = () => {
@@ -229,9 +233,11 @@ const Game: React.FC = () => {
             <label htmlFor="side">Размер поля </label>
             <input name="side" onChange={changeSide} type="range" id="side" min={8} max={42} step={2} defaultValue={10}></input>
             <button onClick={spawnBotSnake}>Добавить бота</button>
-            <input type="color" onChange={changeHeadColor}></input>
-            <input type="color" onChange={changeBodyColor}></input>
-            <img id="background" src="https://arkprom.ru/assets/mgr/images/main/plodgruntcjcujcu.jpg" className="image"></img>
+            <label htmlFor="headColor">Цвет головы </label>
+            <input type="color" name="headColor" onChange={changeHeadColor}></input>
+            <label htmlFor="bodyColor">Цвет тела </label>
+            <input type="color" name="bodyColor" onChange={changeBodyColor}></input>
+            <img id="background" src={background} className="image"></img>
             <img id="boostUp" src={boostUp} className="image"></img>
             <img id="boostDown" src={boostDown} className="image"></img>
             <img id="food" src={food} className="image"></img>

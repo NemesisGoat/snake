@@ -27,9 +27,9 @@ class BotSnake extends Snake {
                 return 'left';
             } else if (this.squares[this.head.place - this.WIN.SIDE] && this.squares[this.head.place - this.WIN.SIDE].taken === false) {
                 return 'down';
-            }
             } else if (this.squares[this.head.place + this.WIN.SIDE] && this.squares[this.head.place + this.WIN.SIDE].taken === false) {
                 return 'up';
+            }
         }
         if ((distance > 0 && distance >= (this.WIN.SIDE))) {
             if (this.squares[this.head.place + this.WIN.SIDE] && this.squares[this.head.place + this.WIN.SIDE].taken === false) {
