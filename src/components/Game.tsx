@@ -12,6 +12,7 @@ import background from "../images/background.jpg";
 
 export type TPoint = { x: number, y: number };
 export type TSquare = {num: TPoint[], taken: boolean};
+type TSpawnObject = () => number;
 
 const Game: React.FC = () => {
     const WIN: TWIN = {
@@ -44,13 +45,6 @@ const Game: React.FC = () => {
     }
 
     const colorField = () => {
-        // squares.forEach((square, index) => {
-        //     if (index % 2 === 0) {
-        //         graph.polygon(square.num, 'green');
-        //     } else {
-        //         graph.polygon(square.num, 'lime');
-        //     }
-        // })
         graph.drawBackground(document.getElementById('background'));
     }
 
@@ -145,7 +139,7 @@ const Game: React.FC = () => {
         })
     }
 
-    const spawnFood: any = () => {
+    const spawnFood: TSpawnObject = () => {
         const location = Math.floor(Math.random() * ((WIN.SIDE - 1) ** 2 - 1));
         if (squares[location].taken) {
             return spawnFood();
@@ -153,7 +147,7 @@ const Game: React.FC = () => {
         return location;
     }
 
-    const spawnBoostUp: any = () => {
+    const spawnBoostUp: TSpawnObject = () => {
         const location = Math.floor(Math.random() * ((WIN.SIDE - 1) ** 2 - 1));
         if (squares[location].taken) {
             return spawnBoostUp();
@@ -161,7 +155,7 @@ const Game: React.FC = () => {
         return location;
     }
     
-    const spawnBoostDown: any = () => {
+    const spawnBoostDown: TSpawnObject = () => {
         const location = Math.floor(Math.random() * ((WIN.SIDE - 1) ** 2 - 1));
         if (squares[location].taken) {
             return spawnBoostDown();
@@ -198,14 +192,11 @@ const Game: React.FC = () => {
             }
         })
         if (locationOfBoostUp != -1) {
-            //graph.polygon(squares[locationOfBoostUp].num, 'pink');
             graph.drawImage(document.getElementById('boostUp'), squares[locationOfBoostUp].num[1].x, squares[locationOfBoostUp].num[1].y, WIN.SIDE);
         }
         if (locationOfBoostDown != -1) {
-            //graph.polygon(squares[locationOfBoostDown].num, 'olive');
             graph.drawImage(document.getElementById('boostDown'), squares[locationOfBoostDown].num[1].x, squares[locationOfBoostDown].num[1].y, WIN.SIDE);
         }
-        //graph.polygon(squares[locationOfFood].num, 'red');
         graph.drawImage(document.getElementById('food'), squares[locationOfFood].num[1].x, squares[locationOfFood].num[1].y, WIN.SIDE);
     }
 

@@ -1,5 +1,3 @@
-import image from 'https://bogatyr.club/uploads/posts/2023-03/1678826790_bogatyr-club-p-fon-dlya-storis-kosmos-foni-vkontakte-5.jpg';
-
 export type TWIN = {
     LEFT: number;
     BOTTOM: number;

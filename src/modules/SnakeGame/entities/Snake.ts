@@ -92,7 +92,7 @@ class Snake {
         clearInterval(this.moving);
     }
 
-    respawnSnake: any = () => {
+    respawnSnake: () => void = () => {
         this.segments.forEach(segment => {
             this.squares[segment.place].taken = false;
         })

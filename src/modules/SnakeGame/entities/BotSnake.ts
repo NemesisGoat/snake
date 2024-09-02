@@ -1,4 +1,4 @@
-import { TPoint, TSquare } from "../../../components/Game";
+import { TSquare } from "../../../components/Game";
 import { TWIN } from "../../Graph/Graph";
 import Head from "./Head";
 import Snake from "./Snake";
@@ -51,6 +51,8 @@ class BotSnake extends Snake {
         }
         return this.head.direction;
     }
+
+    
 }
 
 export default BotSnake;
